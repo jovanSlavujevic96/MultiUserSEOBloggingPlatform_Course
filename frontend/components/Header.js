@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import Link from 'next/link';
 import {APP_NAME} from '../config'
 
 import {
@@ -22,18 +23,25 @@ const Header = () => {
     }
 
     // found this example on: https://reactstrap.github.io/?path=/docs/components-navbar--navbar
+    // <Navlink> is same as <a>
     return (
         <div>
             <Navbar color="light" light expand="md">
-                <NavbarBrand href="/">{APP_NAME}</NavbarBrand>
+                <Link href="/">
+                    <NavLink className="font-weight-bold">{APP_NAME}</NavLink>
+                </Link>
                 <NavbarToggler onClick={toggle}/>
                 <Collapse isOpen={isOpen} navbar>
                     <Nav className="ml-auto" navbar>
                         <NavItem>
-                            <NavLink href="/components/">Components</NavLink>
+                            <Link href="/signin">
+                                <NavLink>Signin</NavLink>
+                            </Link>
                         </NavItem>
                         <NavItem>
-                            <NavLink href="https://github.com/reactstrap/reactstrap">Github</NavLink>
+                            <Link href="/signup">
+                                <NavLink>Signup</NavLink>
+                            </Link>
                         </NavItem>
                     </Nav>
                 </Collapse>
