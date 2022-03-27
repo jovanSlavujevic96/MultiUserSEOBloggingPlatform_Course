@@ -7,7 +7,7 @@ Initialize the server
 >
 > $ npm init -y
 
-Install the following packages:
+Install the following npm packages:
 
 - express
 - mongoose (to talk with MongoDB)
@@ -36,3 +36,8 @@ Run command prompt as Administrator
 > md "\data\db"
 >
 > `mongod --dbpath="C:\data\db"`
+
+## Install packages for auth and blog
+
+Install the following npm packages for auth and blog
+> npm i express-validator jsonwebtoken express-jwt formidable lodash slugify string-strip-html
