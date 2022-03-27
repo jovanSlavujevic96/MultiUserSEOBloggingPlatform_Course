@@ -12,7 +12,7 @@ SEO (Search Engine Optimization)
 - Node.js & npm (https://nodejs.org/en/download/)
 - Postman - backend testing tool (https://www.postman.com/)
 - MongoDB - database (https://www.mongodb.com/try/download/community)
-- Robo3T (https://robomongo.org/download)
+- Robo3T - localhost database access tool (https://robomongo.org/download)
 
 ## Features
 
