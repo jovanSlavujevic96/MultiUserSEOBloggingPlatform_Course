@@ -8,5 +8,8 @@ Initialize the frontent project
 Instructions how to configure Next.js (https://nextjs.org/docs)
 > $ npm install --save next react react-dom
 
-Run client:
+Instructions how to configure Reactstrap (https://reactstrap.github.io)
+> $ npm install --save reactstrap react react-dom
+
+To run client:
 > $ npm run dev

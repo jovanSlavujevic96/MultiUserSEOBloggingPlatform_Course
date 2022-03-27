@@ -16,7 +16,8 @@ SEO (Search Engine Optimization)
 - Robo3T - localhost database access tool (https://robomongo.org/download)
 
 ### Frontend
-- Next.js - frontent framework (https://nextjs.org)
+- Next.js - frontend framework (https://nextjs.org)
+- Reactstrap - frontend framework - Bootstrap wo/ jQuery (https://reactstrap.github.io/)
 
 ## Features
 
