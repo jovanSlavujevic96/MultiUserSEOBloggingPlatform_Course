@@ -1,5 +1,6 @@
 import React from "react";
 import {useState} from "react";
+import {signup, singup} from "../../actions/auth";
 
 const SignupComponent = () => {
     const [values, setValues] = useState({
@@ -15,9 +16,46 @@ const SignupComponent = () => {
 
     const {name, email, password, error, loading, message, showForm} = values;
 
+    const showLoading = () => <div className="alert alert-info">Loading...</div>;
+
+    const showError = () => <div className="alert alert-danger">{error}</div>;
+
+    const showMessage = () => <div className="alert alert-info">{message}</div>;
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.table({name, email, password, error, loading, message, showForm});
+
+        // test user object
+        // console.table({name, email, password, error, loading, message, showForm});
+
+        // sets loading to true untill we get response
+        setValues({...values, loading: true, error: false});
+
+        // create user object from this data
+        const user = {name, email, password};
+
+        // pass user object to signup
+        signup(user)
+        .then(data => {
+            // error: 'string of error'
+            // recommendation to always send error in this format
+            if (data.error) {
+                setValues({...values, error: data.error, loading:false });
+            }
+            else {
+                setValues({
+                    ...values,
+                    name: '',
+                    email: '',
+                    password: '',
+                    error: '',
+                    loading:false,
+                    message: data.message,
+                    showForm: false
+                });
+                // once the user create account we want to disable the form -> the subbmit button
+            }
+        });
     };
 
     /** dynamic handleChange method */
@@ -68,7 +106,10 @@ const SignupComponent = () => {
 
     return (
         <React.Fragment>
-            {signupForm()}
+            {error && showError()}
+            {loading && showLoading()}
+            {message && showMessage()}
+            {showForm && signupForm()}
         </React.Fragment>
     );
 };

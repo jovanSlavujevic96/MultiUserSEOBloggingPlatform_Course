@@ -5,8 +5,12 @@ import Link from 'next/link';
 const Signup = () => {
     return (
         <Layout>
-            <h2>Signup page</h2>
-            <SignupComponent />
+            <h2 className="text-center pt-4 pb-4">Signup page</h2>
+            <div className="row">
+                <div className="col-md-8 offset-md-2">
+                    <SignupComponent />
+                </div>
+            </div>
         </Layout>
     )
 }

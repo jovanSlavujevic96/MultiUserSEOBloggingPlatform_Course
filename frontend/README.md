@@ -15,3 +15,8 @@ Instructions how to configure Reactstrap (https://reactstrap.github.io)
 
 To run client:
 > $ npm run dev
+
+To send user information to backend we need a HTTP client.
+> $ npm i isomorphic-fetch
+
+`isomorphic-fetch works in both client and server side`
