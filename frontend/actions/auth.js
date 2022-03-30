@@ -64,7 +64,7 @@ export const removeCookie = (key) => {
 export const getCookie = (key) => {
     // if (process.browser) @deprecated
     if (typeof window) {
-        cookie.get(key);
+        return cookie.get(key);
     }
 };
 
@@ -80,6 +80,14 @@ export const removeLocalStorage = (key) => {
     // if (process.browser) @deprecated
     if (typeof window) {
         localStorage.removeItem(key);
+    }
+};
+
+// get local storagr
+export const getLocalStorage = (key) => {
+    // if (process.browser) @deprecated
+    if (typeof window) {
+        return localStorage.getItem(key);
     }
 };
 
@@ -99,7 +107,7 @@ export const isAuth = () => {
     // if (process.browser) @deprecated
     if (typeof window) {
         if (getCookie('token')) {
-            const localStorageChecked = localStorage.getItem('user');
+            const localStorageChecked = getLocalStorage('user');
             if (localStorageChecked) {
                 return JSON.parse(localStorageChecked);
             }
@@ -108,4 +116,20 @@ export const isAuth = () => {
             }
         }
     }
+};
+
+// signout
+export const signout = (next) => {
+    removeCookie('token');
+    removeLocalStorage('user');
+
+    next();
+
+    return fetch(`${API}/signout`, {
+        method: 'GET'
+    })
+    .then(response => {
+        console.log('signout success');
+    })
+    .catch(err => console.log(err));
 };
