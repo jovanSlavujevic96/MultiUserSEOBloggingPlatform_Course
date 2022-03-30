@@ -1,13 +1,7 @@
 import Layout from '../components/Layout';
 import SignupComponent from '../components/auth/SignupComponent';
-import { isAuth } from '../actions/auth';
-import Router from 'next/router';
 
 const Signup = () => {
-    if (isAuth()) {
-        Router.replace(`/`);
-        return null;
-    }
     return (
         <Layout>
             <h2 className="text-center pt-4 pb-4">Sign up</h2>

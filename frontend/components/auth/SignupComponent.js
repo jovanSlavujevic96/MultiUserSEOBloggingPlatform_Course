@@ -1,6 +1,7 @@
 import React from "react";
-import {useState} from "react";
-import {signup} from "../../actions/auth";
+import Router from "next/router";
+import {useState, useEffect} from "react";
+import {signup, isAuth} from "../../actions/auth";
 
 const SignupComponent = () => {
     const [values, setValues] = useState({
@@ -15,6 +16,11 @@ const SignupComponent = () => {
     });
 
     const {name, email, password, error, loading, message, showForm} = values;
+
+    // redirect to homepage if user is already signed in (authenticated)
+    useEffect(() => {
+        isAuth() && Router.push(`/`);
+    }, []);
 
     const showLoading = () => <div className="alert alert-info">Loading...</div>;
 
