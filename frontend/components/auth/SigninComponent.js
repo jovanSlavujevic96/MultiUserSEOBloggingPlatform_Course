@@ -1,10 +1,10 @@
+import Router from "next/router";
 import React from "react";
 import {useState} from "react";
-import {signup} from "../../actions/auth";
+import {signin} from "../../actions/auth";
 
-const SignupComponent = () => {
+const SigninComponent = () => {
     const [values, setValues] = useState({
-        name: '',
         email: '',
         password: '',
 
@@ -14,7 +14,7 @@ const SignupComponent = () => {
         showForm: true
     });
 
-    const {name, email, password, error, loading, message, showForm} = values;
+    const {email, password, error, loading, message, showForm} = values;
 
     const showLoading = () => <div className="alert alert-info">Loading...</div>;
 
@@ -32,27 +32,26 @@ const SignupComponent = () => {
         setValues({...values, loading: true, error: false});
 
         // create user object from this data
-        const user = {name, email, password};
+        const user = {email, password};
 
         // pass user object to signup
-        signup(user).then(data => {
+        signin(user).then(data => {
             // error: 'string of error'
             // recommendation to always send error in this format
             if (data.error) {
                 setValues({...values, error: data.error, loading:false });
             }
             else {
-                setValues({
-                    ...values,
-                    name: '',
-                    email: '',
-                    password: '',
-                    error: '',
-                    loading:false,
-                    message: data.message,
-                    showForm: false
-                });
-                // once the user create account we want to disable the form -> the subbmit button
+                /* SUCCESFULL sign in! */
+
+                // save user token to cookie
+
+                // save user info to local storage
+
+                // authenticate user
+
+                // redirect to home page, for now.
+                Router.push(`/`);
             }
         });
     };
@@ -63,19 +62,9 @@ const SignupComponent = () => {
         setValues({...values, error: false, [name]: e.target.value});
     };
 
-    const signupForm = () => {
+    const signinForm = () => {
         return (
             <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <input
-                        value={name}
-                        onChange={handleChange('name')}
-                        type="text"
-                        className="form-control"
-                        placeholder="Type your name"
-                    />
-                </div>
-
                 <div className="form-group">
                     <input
                         value={email}
@@ -97,7 +86,7 @@ const SignupComponent = () => {
                 </div>
 
                 <div>
-                    <button className="btn btn-primary">Signup</button>
+                    <button className="btn btn-primary">Signin</button>
                 </div>
             </form>
         );
@@ -108,9 +97,9 @@ const SignupComponent = () => {
             {error && showError()}
             {loading && showLoading()}
             {message && showMessage()}
-            {showForm && signupForm()}
+            {showForm && signinForm()}
         </React.Fragment>
     );
 };
 
-export default SignupComponent;
+export default SigninComponent;
