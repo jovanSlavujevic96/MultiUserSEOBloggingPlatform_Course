@@ -20,3 +20,6 @@ To send user information to backend we need a HTTP client.
 > $ npm i isomorphic-fetch
 
 `isomorphic-fetch works in both client and server side`
+
+To manage cookies we need to install additional package:
+> $ npm i js-cookie
