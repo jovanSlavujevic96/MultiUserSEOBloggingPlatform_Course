@@ -39,12 +39,12 @@ const Header = () => {
                             <React.Fragment>
                                 <NavItem>
                                     <Link href="/signin">
-                                        <NavLink>Signin</NavLink>
+                                        <NavLink>Sign in</NavLink>
                                     </Link>
                                 </NavItem>
                                 <NavItem>
                                     <Link href="/signup">
-                                        <NavLink>Signup</NavLink>
+                                        <NavLink>Sign up</NavLink>
                                     </Link>
                                 </NavItem>
                             </React.Fragment>
@@ -57,7 +57,7 @@ const Header = () => {
                                     onClick={() => signout(
                                         () => Router.replace(`/signin`)
                                     )}>
-                                    Signout
+                                    Sign out
                                 </NavLink>
                             </NavItem>
                         )}

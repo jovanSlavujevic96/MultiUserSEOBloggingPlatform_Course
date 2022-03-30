@@ -8,9 +8,9 @@ const Index = () => {
     // but it keeps <a> within
     return (
         <Layout>
-            <h2>Index page</h2>
+            <h2 className="text-center pt-4 pb-4">Index page</h2>
             <Link href="/signup">
-                <a>Signup</a>
+                <a>Sign up</a>
             </Link>
         </Layout>
     );
