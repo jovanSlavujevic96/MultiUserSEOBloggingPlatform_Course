@@ -23,3 +23,9 @@ To send user information to backend we need a HTTP client.
 
 To manage cookies we need to install additional package:
 > $ npm i js-cookie
+
+To have a progress animation during page loading install this package:
+> $ npm i nprogress
+
+`DEPRECATED:` To use CSS styles in next.js we must install:
+> $ npm i @zeit/next-css
