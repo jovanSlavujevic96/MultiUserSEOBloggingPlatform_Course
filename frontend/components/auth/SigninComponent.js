@@ -51,8 +51,12 @@ const SigninComponent = () => {
 
                 // authenticate user
                 authenticate(data, () => {
-                    // redirect to home page, for now.
-                    Router.push(`/`);
+                    if (isAuth() && isAuth().role === 1) {
+                        Router.push(`/admin`);
+                    }
+                    else {
+                        Router.push(`/user`);
+                    }
                 });
             }
         });
