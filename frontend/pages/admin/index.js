@@ -1,4 +1,5 @@
 import Layout from '../../components/Layout';
+import Admin from '../../components/auth/Admin';
 
 const AdminIndex = () => {
     // <Link> is repalcement for <a> HTML tag
@@ -7,7 +8,9 @@ const AdminIndex = () => {
     // but it keeps <a> within
     return (
         <Layout>
-            <h2 className="text-center pt-4 pb-4">Admin Dashboard</h2>
+            <Admin>
+                <h2 className="text-center pt-4 pb-4">Admin Dashboard</h2>
+            </Admin>
         </Layout>
     );
 };
