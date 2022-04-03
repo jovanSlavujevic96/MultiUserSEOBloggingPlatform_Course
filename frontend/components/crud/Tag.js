@@ -1,39 +1,40 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
+import React from 'react';
 
 import {isAuth, getCookie} from '../../actions/auth';
-import {createCategory, getCategories, removeCategory} from '../../actions/category';
+import {createTag, getTags, removeTag} from '../../actions/tag';
 
-const Category = () => {
+const Tag = () => {
     const [values, setValues] = useState({
         name: '',
 
         error: false,
         success: false,
-        categories: [],
+        tags: [],
         removed: false,
         reload: false
     });
 
-    const {name, error, success, categories, removed, reload} = values;
+    const {name, error, success, tags, removed, reload} = values;
     const token = getCookie('token');
 
     useEffect(() => {
-        loadCategories();
+        loadTags();
     }, [reload]);
 
-    const loadCategories = () => {
-        getCategories().then(data => {
+    const loadTags = () => {
+        getTags().then(data => {
             if (data.error) {
                 console.log(data.error);
             }
             else {
-                setValues({...values, categories: data});
+                setValues({...values, tags: data});
             }
         });
     };
 
-    const showCategories = () => {
-        return categories.map((c, i) => {
+    const showTags = () => {
+        return tags.map((c, i) => {
             return (
                 <button
                     title="Double click to delete"
@@ -48,12 +49,9 @@ const Category = () => {
     };
 
     const deleteConfirm = slug => {
-        let answer = window.confirm('Are you sure you want to delete this category?');
+        let answer = window.confirm('Are you sure you want to delete this tag?');
         if (answer) {
-            // test
-            // console.log('delete', slug);
-
-            removeCategory(slug, token).then(data => {
+            removeTag(slug, token).then(data => {
                 if (data.error) {
                     console.log(data.error);
                 }
@@ -67,10 +65,7 @@ const Category = () => {
     const clickSubmit = (e) => {
         e.preventDefault();
 
-        // test
-        // console.log('create category');
-
-        createCategory({name}, token).then(data => {
+        createTag({name}, token).then(data => {
             if (data.error) {
                 setValues({...values, error: data.error, success: false});
             }
@@ -86,19 +81,19 @@ const Category = () => {
 
     const showCreated = () => {
         if (success) {
-            return <p className="text-success">Category is created</p>;
+            return <p className="text-success">Tag is created</p>;
         }
     }
 
     const showAlreadyCreated = () => {
         if (error) {
-            return <p className="text-danger">Category already exists</p>;
+            return <p className="text-danger">Tag already exists</p>;
         }
     }
 
     const showRemoved = () => {
         if (removed) {
-            return <p className="text-danger">Category is removed</p>;
+            return <p className="text-danger">Tag is removed</p>;
         }
     }
 
@@ -106,7 +101,7 @@ const Category = () => {
         setValues({...values, error: false, success: false, removed: ''})
     }
 
-    const newCategoryForm = () => (
+    const newTagForm = () => (
         <form onSubmit={clickSubmit}>
             <div className="form-group">
                 <label className="text-muted">Name</label>
@@ -124,11 +119,11 @@ const Category = () => {
             {showAlreadyCreated()}
             {showRemoved()}
             <div onMouseMove={() => mouseMoveHandler()}>
-                {newCategoryForm()}
-                {showCategories()}
+                {newTagForm()}
+                {showTags()}
             </div>
         </React.Fragment>
     );
 };
 
-export default Category;
+export default Tag;
