@@ -29,3 +29,6 @@ To have a progress animation during page loading install this package:
 
 `DEPRECATED:` To use CSS styles in next.js we must install:
 > $ npm i @zeit/next-css
+
+To create rich text editor install:
+> $ npm install --save react-quill@beta
