@@ -17,6 +17,7 @@ import Category from '../models/category.js';
 import Tag from '../models/tag.js';
 import User from '../models/user.js';
 import {errorHandler} from '../helpers/dbErrorHandler.js';
+import { smartTrim } from '../helpers/blog.js';
 
 const createBlog = (req, res) => {
     let form = new formidable.IncomingForm();
@@ -57,6 +58,7 @@ const createBlog = (req, res) => {
         blog.title = title;
         blog.slug = slugify(title).toLowerCase();
         blog.body = body;
+        blog.excerpt = smartTrim(body, 320, ' ', ' ...');
         blog.mtitle = `${title} | ${process.env.APP_NAME}`;
         blog.mdesc = stripHtml(body.substring(0, 160)).result;
         blog.postedBy = req.user._id;
