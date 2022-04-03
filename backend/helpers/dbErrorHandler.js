@@ -11,14 +11,14 @@ const uniqueMessage = error => {
     } catch (ex) {
         output = 'Unique field already exists';
     }
- 
+
     return output;
 };
  
 /**
  * Get the error message from error object
  */
-exports.errorHandler = error => {
+const errorHandler = error => {
     let message = '';
  
     if (error.code) {
@@ -31,10 +31,18 @@ exports.errorHandler = error => {
                 message = 'Something went wrong';
         }
     } else {
-        for (let errorName in error.errorors) {
-            if (error.errorors[errorName].message) message = error.errorors[errorName].message;
+        if (error.errorors) {
+            for (let errorName in error.errorors) {
+                if (error.errorors[errorName].message) {
+                    message = error.errorors[errorName].message;
+                }
+            }
+        } else if (error._message) {
+            message = error._message;
         }
     }
- 
+
     return message;
 };
+
+export { errorHandler };

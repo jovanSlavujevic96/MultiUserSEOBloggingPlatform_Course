@@ -1,6 +1,6 @@
-const {check} = require('express-validator');
+import {check} from 'express-validator';
 
-exports.tagCreateValidator = [
+export const tagCreateValidator = [
     check('name')
         .not()
         .isEmpty()

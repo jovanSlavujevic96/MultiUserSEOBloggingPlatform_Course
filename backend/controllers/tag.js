@@ -1,9 +1,9 @@
-const Tag = require('../models/tag');
-const slugify = require('slugify');
-const {errorHandler} = require('../helpers/dbErrorHandler');
-const tag = require('../models/tag');
+import slugify from 'slugify';
 
-exports.create = (req, res) => {
+import Tag from '../models/tag.js';
+import {errorHandler} from '../helpers/dbErrorHandler.js';
+
+const create = (req, res) => {
     const {name} = req.body;
     let slug = slugify(name).toLowerCase();
 
@@ -19,7 +19,7 @@ exports.create = (req, res) => {
     });
 };
 
-exports.list = (req, res) => {
+const list = (req, res) => {
     Tag.find({}).exec((err,data) => {
         if (err) {
             return res.status(400).json({
@@ -30,7 +30,7 @@ exports.list = (req, res) => {
     });
 };
 
-exports.read = (req, res) => {
+const read = (req, res) => {
     const slug = req.params.slug.toLowerCase();
 
     Tag.findOne({slug}).exec((err, category) => {
@@ -43,7 +43,7 @@ exports.read = (req, res) => {
     });
 };
 
-exports.remove = (req, res) => {
+const remove = (req, res) => {
     const slug = req.params.slug.toLowerCase();
 
     Tag.findOneAndRemove({slug}).exec((err, data) => {
@@ -57,3 +57,8 @@ exports.remove = (req, res) => {
         });
     });
 }
+
+export { create };
+export { list };
+export { read };
+export { remove };

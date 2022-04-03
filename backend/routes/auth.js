@@ -1,10 +1,11 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {signup, signin, signout, requireSignin} = require('../controllers/auth');
+import {signup, signin, signout} from '../controllers/auth.js';
+// import { requireSignin } from '../controllers/auth.js';
 
 // validators
-const {runValidation} = require('../validators'); /* index.js is default */
-const {userSignupValidator, userSigninValidator } = require('../validators/auth');
+import {runValidation} from '../validators/index.js';
+import {userSignupValidator, userSigninValidator } from '../validators/auth.js';
 
 router.post('/signup', userSignupValidator, runValidation, signup);
 router.post('/signin', userSigninValidator, runValidation, signin);
@@ -17,5 +18,4 @@ router.get('/signout', signout);
 //     });
 // });
 
-// any other router created later will be exported from here using `module.exports`
-module.exports = router;
+export default router;

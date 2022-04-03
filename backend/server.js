@@ -1,17 +1,23 @@
-const express = require('express');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-const { default: mongoose } = require('mongoose');
-require('dotenv').config();
+import express from 'express';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import { mongoose } from 'mongoose';
+
+/**
+ * Foollowing line:
+// require('dotenv').config();
+ * Replaced by one bellow:
+**/
+import 'dotenv/config';
 
 // bring routes
-const blogRoutes = require('./routes/blog');
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
-const categoryRoutes = require('./routes/category');
-const tagRoutes = require('./routes/tag');
+import blogRoutes from './routes/blog.js';
+import authRoutes from './routes/auth.js';
+import userRoutes from './routes/user.js';
+import categoryRoutes from './routes/category.js';
+import tagRoutes from './routes/tag.js';
 
 // app
 const app = express();

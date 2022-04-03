@@ -1,18 +1,17 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 // controllers
-const {create, list, read, remove} = require('../controllers/category');
-const {requireSignin, adminMiddleware} = require('../controllers/auth');
+import {create, list, read, remove} from '../controllers/category.js';
+import {requireSignin, adminMiddleware} from '../controllers/auth.js';
 
 // validators
-const {runValidation} = require('../validators');
-const {categoryCreateValidator } = require('../validators/category');
+import {runValidation} from '../validators/index.js';
+import {categoryCreateValidator } from '../validators/category.js';
 
 router.post('/category', categoryCreateValidator, runValidation, requireSignin, adminMiddleware, create);
 router.get('/categories', list);
 router.get('/category/:slug', read);
 router.delete('/category/:slug', requireSignin, adminMiddleware, remove);
 
-// any other router created later will be exported from here using `module.exports`
-module.exports = router;
+export default router;

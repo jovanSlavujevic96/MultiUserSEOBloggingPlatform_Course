@@ -1,9 +1,10 @@
-const User = require('../models/user');
-const shortId = require('shortid');
-const jwt = require('jsonwebtoken');
-const expressJwt = require('express-jwt');
+import shortId from 'shortid';
+import jwt from 'jsonwebtoken';
+import expressJwt from 'express-jwt'
 
-exports.signup = (req, res) => {
+import User from '../models/user.js';
+
+const signup = (req, res) => {
     User.findOne({email: req.body.email}).exec((err, user) => {
         if (user) {
             return res.status(400).json({
@@ -32,7 +33,7 @@ exports.signup = (req, res) => {
     });
 }
 
-exports.signin = (req, res) => {
+const signin = (req, res) => {
     const {email, password} = req.body;
 
     // check if user exist
@@ -62,19 +63,19 @@ exports.signin = (req, res) => {
     });
 };
 
-exports.signout = (req, res) => {
+const signout = (req, res) => {
     res.clearCookie('token');
     res.json({
         message: "Signout success"
     });
 }
 
-exports.requireSignin = expressJwt({
+const requireSignin = expressJwt({
     secret: process.env.JWT_SECRET,
     algorithms: ["HS256"], // must be added
 });
 
-exports.authMiddleware = (req, res, next) => {
+const authMiddleware = () => (req, res, next) => {
     const authUserId = req.user._id;
     User.findById({_id: authUserId}).exec((err, user) => {
         if (err || !user) {
@@ -87,7 +88,7 @@ exports.authMiddleware = (req, res, next) => {
     });
 };
 
-exports.adminMiddleware = (req, res, next) => {
+const adminMiddleware = (req, res, next) => {
     const adminUserId = req.user._id;
     User.findById({_id: adminUserId}).exec((err, user) => {
         if (err || !user) {
@@ -107,3 +108,10 @@ exports.adminMiddleware = (req, res, next) => {
         next();
     });
 };
+
+export { signup };
+export { signin };
+export { signout };
+export { requireSignin };
+export { authMiddleware };
+export { adminMiddleware };

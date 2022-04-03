@@ -1,9 +1,9 @@
-const Category = require('../models/category');
-const slugify = require('slugify');
-const {errorHandler} = require('../helpers/dbErrorHandler');
-const category = require('../models/category');
+import slugify from 'slugify';
 
-exports.create = (req, res) => {
+import Category from '../models/category.js';
+import {errorHandler} from '../helpers/dbErrorHandler.js';
+
+const create = (req, res) => {
     const {name} = req.body;
     let slug = slugify(name).toLowerCase();
 
@@ -19,7 +19,7 @@ exports.create = (req, res) => {
     });
 };
 
-exports.list = (req, res) => {
+const list = (req, res) => {
     // pass the empty object {} fo find method to get all objects (categories)
     Category.find({}).exec((err,data) => {
         if (err) {
@@ -31,7 +31,7 @@ exports.list = (req, res) => {
     });
 };
 
-exports.read = (req, res) => {
+const read = (req, res) => {
     const slug = req.params.slug.toLowerCase();
 
     Category.findOne({slug}).exec((err, category) => {
@@ -44,7 +44,7 @@ exports.read = (req, res) => {
     });
 };
 
-exports.remove = (req, res) => {
+const remove = (req, res) => {
     const slug = req.params.slug.toLowerCase();
 
     Category.findOneAndRemove({slug}).exec((err, data) => {
@@ -58,3 +58,8 @@ exports.remove = (req, res) => {
         });
     });
 }
+
+export { create };
+export { list };
+export { read };
+export { remove };

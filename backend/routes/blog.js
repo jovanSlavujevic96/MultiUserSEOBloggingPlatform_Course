@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {time} = require('../controllers/blog');
 
-router.get('/', time);
+import { createBlog } from '../controllers/blog.js';
+import { requireSignin, adminMiddleware } from '../controllers/auth.js';
 
-// any other router created later will be exported from here using `module.exports`
-module.exports = router;
+router.post('/blog', requireSignin, adminMiddleware, createBlog);
+
+export default router;
