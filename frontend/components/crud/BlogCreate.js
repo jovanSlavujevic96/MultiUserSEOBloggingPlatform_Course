@@ -15,7 +15,21 @@ const ReactQuill = dynamic(() => import('react-quill'), {ssr: false})
 import '../../node_modules/react-quill/dist/quill.snow.css';
 
 const CreateBlog = ({router}) => {
-    const [body, setBody] = useState({}); // empty for now
+    /** blog from local storage */
+    const blogFromLS = () => {
+        if (typeof window === 'undefined') {
+            return false;
+        }
+
+        if (localStorage.getItem('blog')) {
+            return JSON.parse(localStorage.getItem('blog'));
+        }
+        else {
+            return false;
+        }
+    }
+
+    const [body, setBody] = useState( blogFromLS() );
 
     const [values, setValues] = useState({
         error: '',
@@ -28,13 +42,28 @@ const CreateBlog = ({router}) => {
 
     const { error, sizeError, success, formData, title, hidePublishButton } = values;
 
+    useEffect(() => {
+        setValues({...values, formData: new FormData()})
+    }, [router]);
+
     const handleChange = name => e => {
-        console.log(e.taget.value);
+        // test
+        // console.log(e.taget.value);
+
+        /* grab the first file in files array if it's photo*/
+        const value = (name === 'photo') ? e.target.files[0] : e.target.value
+        formData.set(name, value);
+        setValues({...values, [name]: value, formData: formData, error: ''})
     };
 
     // this is for rich text editor
     const handleBody = e => {
-        console.log(e.taget.value);
+        // console.log(e.taget.value);
+        setBody(e);
+        formData.set('body', e);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('blog', JSON.stringify(e));
+        }
     };
 
     const publishBlog = (e) => {
@@ -47,11 +76,22 @@ const CreateBlog = ({router}) => {
             <form onSubmit={publishBlog}>
                 <div className="form-group">
                     <label className="text-muted">Title</label>
-                    <input type="text" className="form-control" value={title} onChange={handleChange('title')} />
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={title}
+                        onChange={handleChange('title')}
+                    />
                 </div>
 
                 <div className="form-group">
-                    <ReactQuill value={body} placeholder="Write something amazing" onChange={handleBody} />
+                    <ReactQuill
+                        modules={CreateBlog.modules}
+                        formats={CreateBlog.formats}
+                        value={body}
+                        placeholder="Write something amazing"
+                        onChange={handleBody}
+                    />
                 </div>
 
                 <div>
@@ -61,7 +101,42 @@ const CreateBlog = ({router}) => {
         );
     };
 
-    return <div>{createBlogForm()}</div>;
+    return <div>
+        {createBlogForm()}
+        <hr/>
+        {JSON.stringify(title)}
+        <hr/>
+        {JSON.stringify(body)}
+    </div>;
 };
+
+CreateBlog.modules = {
+    toolbar: [
+        [{ header: '1' }, { header: '2' }, { header: [3, 4, 5, 6] }, { font: [] }],
+        [{ size: [] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['link', 'image', 'video'],
+        ['clean'],
+        ['code-block']
+    ]
+};
+
+CreateBlog.formats = [
+    'header',
+    'font',
+    'size',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'link',
+    'image',
+    'video',
+    'code-block'
+];
 
 export default withRouter(CreateBlog);
