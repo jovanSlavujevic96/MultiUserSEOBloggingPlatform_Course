@@ -29,6 +29,9 @@ const CreateBlog = ({router}) => {
         }
     }
 
+    const [categories, setCategories] = useState([]);
+    const [tags, setTags] = useState([]);
+
     const [body, setBody] = useState( blogFromLS() );
 
     const [values, setValues] = useState({
@@ -44,7 +47,32 @@ const CreateBlog = ({router}) => {
 
     useEffect(() => {
         setValues({...values, formData: new FormData()})
+
+        initCategories();
+        initTags();
     }, [router]);
+
+    const initCategories = () => {
+        getCategories().then(data => {
+            if (data.error) {
+                setValues({...values, error: data.error});
+            }
+            else {
+                setCategories(data);
+            }
+        });
+    };
+
+    const initTags = () => {
+        getTags().then(data => {
+            if (data.error) {
+                setValues({...values, error: data.error});
+            }
+            else {
+                setTags(data);
+            }
+        });
+    };
 
     const handleChange = name => e => {
         // test
@@ -64,6 +92,34 @@ const CreateBlog = ({router}) => {
         if (typeof window !== 'undefined') {
             localStorage.setItem('blog', JSON.stringify(e));
         }
+    };
+
+    const showCategories = () => {
+        /* c - category ; i - index */
+        return (
+            categories && categories.map((c, i) => {
+                return (
+                    <li key={i} className="list-unstyled">
+                        <input type="checkbox" className="mr-2"/>
+                        <label className="form-check-label">{c.name}</label>
+                    </li>
+                );
+            })
+        );
+    };
+
+    const showTags = () => {
+        /* t - tag ; i - index */
+        return (
+            tags && tags.map((t, i) => {
+                return (
+                    <li key={i} className="list-unstyled">
+                        <input type="checkbox" className="mr-2"/>
+                        <label className="form-check-label">{t.name}</label>
+                    </li>
+                );
+            })
+        );
     };
 
     const publishBlog = (e) => {
@@ -101,12 +157,34 @@ const CreateBlog = ({router}) => {
         );
     };
 
-    return <div>
-        {createBlogForm()}
-        <hr/>
-        {JSON.stringify(title)}
-        <hr/>
-        {JSON.stringify(body)}
+    return <div className="container-fluid">
+        <div className="row">
+            <div className="col-md-8">
+                {createBlogForm()}
+                <hr/>
+                {JSON.stringify(title)}
+                <hr/>
+                {JSON.stringify(body)}
+                <hr/>
+                {JSON.stringify(categories)}
+                <hr/>
+                {JSON.stringify(tags)}
+            </div>
+
+            <div className="col-md-4">
+                <h5>Categories</h5>
+                <hr/>
+                <ul style={{maxHeight: '200px', overflowY: 'scroll'}}>
+                    {showCategories()}
+                </ul>
+
+                <h5>Tags</h5>
+                <hr/>
+                <ul style={{maxHeight: '200px', overflowY: 'scroll'}}>
+                    {showTags()}
+                </ul>
+            </div>
+        </div>
     </div>;
 };
 
