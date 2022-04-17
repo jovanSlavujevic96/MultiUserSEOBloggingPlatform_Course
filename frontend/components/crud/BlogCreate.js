@@ -119,6 +119,27 @@ const CreateBlog = ({router}) => {
         formData.set('categories', all);
     }
 
+    const handleToggleTag = (tag_id) => () => {
+        setValues({...values, error: ''});
+
+        // return the first element or -1
+        const clickedTag = checkedTag.indexOf(tag_id)
+        const all = [...checkedTag];
+
+        if (clickedTag === -1) {
+            // if doesn't exist -> it means that is checked and needs to be pushed to array
+            all.push(tag_id); // push it within
+        }
+        else {
+            // if exists -> it means that is un-checked and needs to be erased from array
+            all.splice(clickedTag, 1); // pull it out
+        }
+
+        console.log(all); // debug information
+        setCheckedTag(all);
+        formData.set('tags', all);
+    }
+
     const showCategories = () => {
         /* c - category ; i - index */
         return (
@@ -139,7 +160,7 @@ const CreateBlog = ({router}) => {
             tags && tags.map((t, i) => {
                 return (
                     <li key={i} className="list-unstyled">
-                        <input type="checkbox" className="mr-2"/>
+                        <input onChange={handleToggleTag(t._id)} type="checkbox" className="mr-2"/>
                         <label className="form-check-label">{t.name}</label>
                     </li>
                 );
