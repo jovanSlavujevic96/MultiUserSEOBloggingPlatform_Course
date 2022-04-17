@@ -32,6 +32,9 @@ const CreateBlog = ({router}) => {
     const [categories, setCategories] = useState([]);
     const [tags, setTags] = useState([]);
 
+    const [checkedCategory, setCheckedCategory] = useState([]); // categories
+    const [checkedTag, setCheckedTag] = useState([]); // tags
+
     const [body, setBody] = useState( blogFromLS() );
 
     const [values, setValues] = useState({
@@ -94,13 +97,35 @@ const CreateBlog = ({router}) => {
         }
     };
 
+    // we return another function because of build error: `too many renders`
+    const handleToggleCategory = (cat_id) => () => {
+        setValues({...values, error: ''});
+
+        // return the first element or -1
+        const clickedCategory = checkedCategory.indexOf(cat_id)
+        const all = [...checkedCategory];
+
+        if (clickedCategory === -1) {
+            // if doesn't exist -> it means that is checked and needs to be pushed to array
+            all.push(cat_id); // push it within
+        }
+        else {
+            // if exists -> it means that is un-checked and needs to be erased from array
+            all.splice(clickedCategory, 1); // pull it out
+        }
+
+        console.log(all); // debug information
+        setCheckedCategory(all);
+        formData.set('categories', all);
+    }
+
     const showCategories = () => {
         /* c - category ; i - index */
         return (
             categories && categories.map((c, i) => {
                 return (
                     <li key={i} className="list-unstyled">
-                        <input type="checkbox" className="mr-2"/>
+                        <input onChange={handleToggleCategory(c._id)} type="checkbox" className="mr-2"/>
                         <label className="form-check-label">{c.name}</label>
                     </li>
                 );
