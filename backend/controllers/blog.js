@@ -137,7 +137,54 @@ export const listAllBlogs = (req, res) => {
 };
 
 export const listAllBlogsCategoriesTags = (req, res) => {
-    
+    // how many blog posts we want to send to each request
+    // we want to grab limit from the frontend
+    let limit = req.body.limit ? parseInt(req.body.limit) : 10;
+    let skip = req.body.skip ? parseInt(req.body.skip) : 0;
+
+    let blogs;
+    let categories;
+    let tags;
+
+    Blog.find({})
+    .populate('categories', '_id name slug')
+    .populate('tags', '_id name slug')
+    .populate('postedBy', '_id name username profile')
+    .sort({createdAt: -1})
+    .skip(skip)
+    .limit(limit)
+    .select('_id title slug excerpt categories tags postedBy createdAt updatedAt')
+    .exec((err, data) => {
+        if (err) {
+            return res.json({
+                error: errorHandler(err)
+            });
+        }
+        blogs = data; // got blogs
+
+        // get all categories
+        Category.find({}).exec((err, c) => {
+            if (err) {
+                return res.json({
+                    error: errorHandler(err)
+                });
+            }
+            categories = c; // got categories
+        });
+
+        // get all tags
+        Tag.find({}).exec((err, t) => {
+            if (err) {
+                return res.json({
+                    error: errorHandler(err)
+                });
+            }
+            tags = t; // got tags
+
+            // return all blogs, categories & tags
+            res.json({blogs, categories, tags, size: blogs.length})
+        });
+    });
 };
 
 export const readBlog = (req, res) => {
