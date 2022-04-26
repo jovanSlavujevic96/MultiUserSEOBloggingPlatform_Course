@@ -190,6 +190,7 @@ export const listAllBlogsCategoriesTags = (req, res) => {
 export const readBlog = (req, res) => {
     const slug = req.params.slug.toLowerCase();
     Blog.findOne({slug})
+        //.select("-photo")                                 // makes sure that you don't send photo
         .populate('categories', '_id name slug')            // informations extracted from categories
         .populate('tags', '_id name slug')                  // informations extracted from tags
         .populate('postedBy', '_id name username profile')  // informations extracted from users
@@ -278,10 +279,26 @@ export const updateBlog = (req, res) => {
                         error: errorHandler(err)
                     });
                 }
-
+                // res.photo = undefined; // makes sure that we don't send photo
                 res.json(result);
             });
 
         });
     });
+};
+
+export const getBlogPhoto = (req, res) => {
+    const slug = req.params.slug.toLowerCase();
+    Blog.findOne({slug})
+        .select('photo')
+        .exec((err, blog) => {
+            if (err || !blog) {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
+            }
+
+            res.set('Content-Type', blog.photo.contentType);
+            return res.send(blog.photo.data);
+        });
 };
