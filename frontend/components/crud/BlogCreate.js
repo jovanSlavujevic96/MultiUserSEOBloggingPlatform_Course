@@ -47,6 +47,7 @@ const CreateBlog = ({router}) => {
     });
 
     const { error, sizeError, success, formData, title, hidePublishButton } = values;
+    const token = getCookie('token');
 
     useEffect(() => {
         setValues({...values, formData: new FormData()})
@@ -170,7 +171,25 @@ const CreateBlog = ({router}) => {
 
     const publishBlog = (e) => {
         e.preventDefault();
-        console.log('ready to publishBlog');
+        // console.log('ready to publishBlog'); // debug info
+
+        createBlog(formData, token).then(data => {
+            if (data.error) {
+                console.log(data.error); // debug
+                setValues({...values, error: data.error});
+            }
+            else {
+                setValues({...values,
+                    title: '',
+                    error: '',
+                    success: `A new blog titled "${data.title}" is created`
+                });
+                setBody(''); /* when we set the body to empty string it also clears the local storage,
+                                because local storage is in sync with our state */
+                setCategories([]);
+                setTags([]);
+            }
+        });
     };
 
     const createBlogForm = () => {
@@ -218,17 +237,34 @@ const CreateBlog = ({router}) => {
             </div>
 
             <div className="col-md-4">
-                <h5>Categories</h5>
-                <hr/>
-                <ul style={{maxHeight: '200px', overflowY: 'scroll'}}>
-                    {showCategories()}
-                </ul>
+                <div>
+                    <div className="form-group pb-2">
+                        <h5>Featured image</h5>
+                        <hr/>
 
-                <h5>Tags</h5>
-                <hr/>
-                <ul style={{maxHeight: '200px', overflowY: 'scroll'}}>
-                    {showTags()}
-                </ul>
+                        <small className="text-muted">Max size: 1 MB</small>
+                        <p>
+                            <label className="btn btn-outline-info">
+                                Upload featured image
+                                <input onChange={handleChange('photo')} type="file" accept="image/*" hidden />
+                            </label>
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h5>Categories</h5>
+                    <hr/>
+                    <ul style={{maxHeight: '200px', overflowY: 'scroll'}}>
+                        {showCategories()}
+                    </ul>
+                </div>
+                <div>
+                    <h5>Tags</h5>
+                    <hr/>
+                    <ul style={{maxHeight: '200px', overflowY: 'scroll'}}>
+                        {showTags()}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>;

@@ -11,7 +11,9 @@ export const createBlog = (blog, token) => {
         body: blog
     })
     .then(response => {
-        return response.json();
+        var response_json = response.json();
+        console.log(response_json);
+        return response_json;
     })
     .catch(err => console.log(err));
 };
