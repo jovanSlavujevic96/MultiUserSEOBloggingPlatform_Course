@@ -119,3 +119,36 @@ const createBlog = (req, res) => {
 };
 
 export { createBlog };
+
+export const listAllBlogs = (req, res) => {
+    Blog.find({}) // empty object {} will give us all the blogs
+    .populate('categories', '_id name slug')
+    .populate('tags', '_id name slug')
+    .populate('postedBy', '_id name username')
+    .select('_id title slug excerpt categories tags postedBy createdAt updatedAt')
+    .exec((err, data) => {
+        if (err) {
+            return res.json({
+                error: errorHandler(err)
+            });
+        }
+        res.json(data);
+    })
+};
+
+export const listAllBlogsCategoriesTags = (req, res) => {
+    
+};
+
+export const readBlog = (req, res) => {
+
+};
+
+export const removeBlog = (req, res) => {
+
+};
+
+export const updateBlog = (req, res) => {
+
+};
+
