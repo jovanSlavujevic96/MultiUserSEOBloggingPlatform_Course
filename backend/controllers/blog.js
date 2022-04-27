@@ -64,8 +64,8 @@ const createBlog = (req, res) => {
         blog.postedBy = req.user._id;
 
         // categories & tags
-        let arrayOfCategories = categories && categories.split(', ');
-        let arrayOfTags = tags && tags.split(', ');
+        const arrayOfCategories = categories && categories.split(',');
+        const arrayOfTags = tags && tags.split(',');
 
         if (files.photo) {
             if (files.photo.size > 1000000) { // if files is bigger than 1Mb

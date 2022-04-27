@@ -129,7 +129,7 @@ export const signout = (next) => {
         method: 'GET'
     })
     .then(response => {
-        console.log('signout success');
+        console.log('signout success'); // debug
     })
     .catch(err => console.log(err));
 };

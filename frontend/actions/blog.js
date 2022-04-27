@@ -12,7 +12,6 @@ export const createBlog = (blog, token) => {
     })
     .then(response => {
         var response_json = response.json();
-        console.log(response_json);
         return response_json;
     })
     .catch(err => console.log(err));
@@ -27,7 +26,6 @@ export const listBlogsWithCategoriesAndTags = () => {
     })
     .then(response => {
         var response_json = response.json();
-        console.log(response_json);
         return response_json;
     })
     .catch(err => console.log(err));

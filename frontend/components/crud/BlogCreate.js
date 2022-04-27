@@ -66,6 +66,7 @@ const CreateBlog = ({router}) => {
                 setCategories(data);
             }
         });
+        setCheckedCategory([]);
     };
 
     const initTags = () => {
@@ -77,6 +78,7 @@ const CreateBlog = ({router}) => {
                 setTags(data);
             }
         });
+        setCheckedTag([]);
     };
 
     const handleChange = name => e => {
@@ -116,7 +118,7 @@ const CreateBlog = ({router}) => {
             all.splice(clickedCategory, 1); // pull it out
         }
 
-        console.log(all); // debug information
+        // console.log(all); // debug information
         setCheckedCategory(all);
         formData.set('categories', all);
     }
@@ -137,7 +139,7 @@ const CreateBlog = ({router}) => {
             all.splice(clickedTag, 1); // pull it out
         }
 
-        console.log(all); // debug information
+        // console.log(all); // debug information
         setCheckedTag(all);
         formData.set('tags', all);
     }
@@ -191,12 +193,16 @@ const CreateBlog = ({router}) => {
                 setValues({...values,
                     title: '',
                     error: '',
-                    success: `A new blog titled "${data.title}" is created`
+                    success: `A new blog titled "${formData.get('title')}" is created`
                 });
                 setBody(''); /* when we set the body to empty string it also clears the local storage,
                                 because local storage is in sync with our state */
+
                 setCategories([]);
                 setTags([]);
+
+                initCategories();
+                initTags();
             }
         });
     };

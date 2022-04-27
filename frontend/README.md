@@ -38,3 +38,9 @@ If you have any problem with npm install code ETARGET for specific <npm_package>
 
 Then install latest version of <npm_package>, i.e.:
 > $ npm i --save-dev <npm_package>@X.X.X
+
+To use pretty timestamp format install:
+> $ npm i moment
+
+To render text as html within page install:
+> $npm i --save --lecagy-peer-deps react-render-html

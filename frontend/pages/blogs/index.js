@@ -4,8 +4,47 @@ import Layout from '../../components/Layout';
 import React, { userState } from 'react';
 import { listBlogsWithCategoriesAndTags } from '../../actions/blog';
 import { API } from '../../config';
+import renderHTML from 'react-render-html';
+import moment from 'moment';
 
-const Blogs = () => {
+const Blogs = ({ blogs, categories, tags, size }) => {
+    const showAllBlogs = () => {
+        return blogs.map((blog, i) => {
+            return <article key={i}>
+                <div className="lead pb-4">
+                    <header>
+                        <Link href={`/blogs/${blog.slug}`}>
+                            <a><h2 className="pt-3 pb-3 font-weight-bold">{blog.title}</h2></a>
+                        </Link>
+                    </header>
+                    <section>
+                        <p className="mark ml-1 pt-2 pb-3">
+                            Written by {blog.postedBy.name} | Published {moment(blog.updatedAt).fromNow()}
+                        </p>
+                    </section>
+                    <section>
+                        <p>blog categories and tags</p>
+                    </section>
+                    <div className="row">
+                        {/* Column for image */}
+                        <div className="col-md-4">image</div>
+
+                        {/* Column for excerpt */}
+                        <div className="col-md-8">
+                            <section>
+                                <div className='pb-3'>{renderHTML(blog.excerpt)}</div>
+                                <Link href={`/blogs/${blog.slug}`}>
+                                    <a className="btn btn-primary pt-2">Read more</a>
+                                </Link>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+            </article>
+        });
+    };
+
     return (
         <Layout>
             <main>
@@ -21,12 +60,33 @@ const Blogs = () => {
                 </div>
                 <div className='container-fluid'>
                     <div className="row">
-                        <div className="col-md-12">show all blogs</div>
+                        <div className="col-md-12">{showAllBlogs()}</div>
                     </div>
                 </div>
             </main>
         </Layout>
     );
+};
+
+// get initial Props can be used only on pages, not in components
+Blogs.getInitialProps = () => {
+    // execute function that makes a request to your back-end (server)
+    // and then get the data and then return the data
+    // !! IMPORTANT -> return DATA
+
+    return listBlogsWithCategoriesAndTags().then(data => {
+        if (data.error) {
+            console.log(data.error);
+        }
+        else {
+            return {
+                blogs: data.blogs,
+                categories: data.categories,
+                tags: data.tags,
+                size: data.size,
+            };
+        }
+    });
 };
 
 export default Blogs; // getInitialProps
