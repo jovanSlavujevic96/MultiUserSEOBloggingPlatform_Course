@@ -305,7 +305,7 @@ export const getBlogPhoto = (req, res) => {
 
 export const listRelatedBlogs = (req, res) => {
     const limit = req.body.limit ? parseInt(req.body.limit) : 3;
-    const { _id, categories } = req.body;
+    const { _id, categories } = req.body.blog;
 
     // $ne - not including
     // $in - including
