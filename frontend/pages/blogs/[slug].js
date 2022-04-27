@@ -3,13 +3,31 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
-import React, { useState } from 'react';
-import { singleBlog } from '../../actions/blog';
+import React, { useEffect, useState } from 'react';
+import { singleBlog, listRelatedBlogs } from '../../actions/blog';
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
 import moment from 'moment';
 import renderHTML from 'react-render-html';
+import SmallCard from '../../components/blog/SmallCard'
 
 const SingleBlog = ({ blog, query }) => {
+    const [related, setRelated] = useState([]);
+
+    const loadRelated = () => {
+        listRelatedBlogs({blog}).then(data => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                setRelated(data);
+            }
+        })
+    };
+
+    // it will run when the component mounts
+    useEffect(() => {
+        loadRelated();
+    }, []);
+
     const head = () => {
         return <Head>
             <title>{blog.title} | {APP_NAME}</title>
@@ -41,6 +59,16 @@ const SingleBlog = ({ blog, query }) => {
                 <a className='btn btn-outline-primary mr-1 ml-1 mt-3 mb-3'>{t.name}</a>
             </Link>
         ));
+    
+    const showRelatedBlogs = () => {
+        return related.map((blog, i) => (
+            <div key={i} className='col-md-4'>
+                <article>
+                    <SmallCard blog={blog} />
+                </article>
+            </div>
+        ));
+    };
 
     return <React.Fragment>
         {head()}
@@ -86,7 +114,9 @@ const SingleBlog = ({ blog, query }) => {
                     <div className='container pb-5'>
                         <h4 className='text-center pt-5 pb-5 h2'>Related blogs</h4>
                         <hr/>
-                        <p>show related blogs</p>
+                        <div className='row'>
+                            {showRelatedBlogs()}
+                        </div>
                     </div>
 
                     <div className='container pb-5'>

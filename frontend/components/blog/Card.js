@@ -47,7 +47,7 @@ const Card = ({blog}) => {
                         style={{maxHeight: '150px', width: 'auto'}}
                         src={`${API}/blog/photo/${blog.slug}`}
                         alt={blog.title}
-                    ></img>
+                    />
                 </section>
             </div>
 
