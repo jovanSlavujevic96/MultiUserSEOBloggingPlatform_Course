@@ -16,4 +16,3 @@ router.put('/blog/:slug', requireSignin, adminMiddleware, updateBlog);
 router.get('/blog/photo/:slug', getBlogPhoto);
 
 export default router;
-``
