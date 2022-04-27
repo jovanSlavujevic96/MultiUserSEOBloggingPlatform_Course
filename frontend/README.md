@@ -32,3 +32,9 @@ To have a progress animation during page loading install this package:
 
 To create rich text editor install:
 > $ npm install --save react-quill@beta
+
+If you have any problem with npm install code ETARGET for specific <npm_package>:
+> $ npm view <npm_package>
+
+Then install latest version of <npm_package>, i.e.:
+> $ npm i --save-dev <npm_package>@X.X.X
