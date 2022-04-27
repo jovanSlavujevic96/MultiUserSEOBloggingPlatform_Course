@@ -9,7 +9,25 @@ import { API, DOMAIN, APP_NAME, FB_APP_ID } from '../../config';
 import moment from 'moment';
 import renderHTML from 'react-render-html';
 
-const SingleBlog = ({ blog }) => {
+const SingleBlog = ({ blog, query }) => {
+    const head = () => {
+        return <Head>
+            <title>{blog.title} | {APP_NAME}</title>
+            <meta name="description" content={blog.mdsec}/>
+            <link rel="canonical" href={`${DOMAIN}/blogs/${query.slug}`}/>
+            <meta property="og:title" content={`${blog.title} | ${APP_NAME}`}/>
+            <meta property="og:description" content={blog.mdsec}/>
+            <meta property="og:type" content="website"/>
+            <meta property="og:url" content={`${DOMAIN}/blogs/${query.slug}`}/>
+            <meta property="og:site_name" content={`${APP_NAME}`}/>
+
+            <meta property="og:image" content={`${API}/blog/photo/${blog.slug}`}/>
+            <meta property="og:image:secure_url" content={`${API}/blog/photo/${blog.slug}`}/>
+            <meta property="og:image:type" content="image/jpg"/>
+            <meta property="fb:app_id" content={`${FB_APP_ID}`}/>
+        </Head>
+    };
+
     const showBlogCategories = blog =>
         blog.categories.map((c, i) => (
             <Link key={i} href={`/categories/${c.slug}`}>
@@ -25,6 +43,8 @@ const SingleBlog = ({ blog }) => {
         ));
 
     return <React.Fragment>
+        {head()}
+
         <Layout>
             <main>
                 <article>
@@ -40,15 +60,19 @@ const SingleBlog = ({ blog }) => {
                         </section>
 
                         <section>
-                            <p className="lead mt-3 mark">
-                                Written by {blog.postedBy.name} | Published {moment(blog.updatedAt).fromNow()}
-                            </p>
+                            <div className='container'>
+                                <h1 className='display-2 pb-3 pt-3 text-center font-weight-bold'>{blog.title}</h1>
 
-                            <div className="pb-3">
-                                {showBlogCategories(blog)}
-                                {showBlogTags(blog)}
-                                <br/>
-                                <br/>
+                                <p className="lead mt-3 mark">
+                                    Written by {blog.postedBy.name} | Published {moment(blog.updatedAt).fromNow()}
+                                </p>
+
+                                <div className="pb-3">
+                                    {showBlogCategories(blog)}
+                                    {showBlogTags(blog)}
+                                    <br/>
+                                    <br/>
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -80,7 +104,7 @@ SingleBlog.getInitialProps = ({query}) => {
             console.log(data.error);
         } else {
             // console.log('GET INITIAL PROPS IN SINGLE BLOG', data); // gets printed in "npm run dev" frontend terminal
-            return {blog: data};
+            return {blog: data, query};
         }
     });
 };
