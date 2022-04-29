@@ -15,7 +15,7 @@ const Blog = () => {
     return (
         <Layout>
             <Admin>
-                <div className="container-fluid">
+                <div className="container">
                     <div className="pt-5 pb-5">
                         <h2>Manage blogs</h2>
                     </div>
