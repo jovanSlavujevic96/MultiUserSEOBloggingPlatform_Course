@@ -10,6 +10,7 @@ import { singleBlog, updateBlog } from '../../actions/blog';
 import { QuillModules, QuillFormats } from '../../helpers/quill';
 const ReactQuill = dynamic(() => import('react-quill'), {ssr: false})
 import '../../node_modules/react-quill/dist/quill.snow.css';
+import { API } from '../../config';
 
 const BlogUpdate = ({router}) => {
     const [body, setBody] = useState('');
@@ -33,6 +34,7 @@ const BlogUpdate = ({router}) => {
     }, [router]);
 
     const {title, error, success, formData} = values;
+    const token = getCookie('token');
 
     const initBlog = () => {
         if (router.query.slug) {
@@ -154,8 +156,32 @@ const BlogUpdate = ({router}) => {
         formData.set('tags', all);
     }
 
-    const editBlog = () => {
-        console.log('update blog');
+    const editBlog = (e) => {
+        e.preventDefault(); // prevent reload of browser
+        updateBlog(formData, token, router.query.slug).then(data => {
+            if (data.error) {
+                setValues({...values, error: data.error});
+            } else {
+                // OPTION 1
+                // setValues({...values, success: `Blog titled "${data.title}" is successfully updated`});
+
+                // OPTION 2
+                if (isAuth() && isAuth().role === 1) { // admin
+                    // OPTION 2A
+                    // Router.replace(`/admin/crud/${router.query.slug}`);
+
+                    // OPTION 2B
+                    Router.replace(`/admin`);
+                }
+                else if (isAuth() && isAuth().role === 0) { // regular user
+                    // OPTION 2A
+                    // Router.replace(`/user/crud/${router.query.slug}`);
+
+                    // OPTION 2B
+                    Router.replace(`/user`);
+                }
+            }
+        });
     };
 
     const showCategories = () => {
@@ -196,6 +222,18 @@ const BlogUpdate = ({router}) => {
         );
     };
 
+    const showError = () => (
+        <div className='alert alert-danger' style={{display: error ? '' : 'none'}}>
+            {error}
+        </div>
+    );
+
+    const showSuccess = () => (
+        <div className='alert alert-success' style={{display: success ? '' : 'none'}}>
+            {success}
+        </div>
+    );
+
     const updateBlogForm = () => {
         return (
             <form onSubmit={editBlog}>
@@ -231,8 +269,15 @@ const BlogUpdate = ({router}) => {
             <div className="col-md-8">
                 {updateBlogForm()}
                 <div className="pt-3">
-                    <p>show success and error msg</p>
+                    {showSuccess()}
+                    {showError()}
                 </div>
+
+                {body && (<img
+                    src={`${API}/blog/photo/${router.query.slug}`}
+                    alt={title}
+                    style={{width: '100%'}}
+                />)}
             </div>
 
             <div className="col-md-4">
