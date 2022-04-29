@@ -21,12 +21,33 @@ const BlogRead = () => {
         });
     };
 
+    const deleteBlog = (slug) => {
+        removeBlog(slug, token).then(data => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                setMessage(data.message);
+                loadAllBlogs();
+            }
+        });
+    };
+
+    const deleteConfirm = (slug) => {
+        let answer = window.confirm('Are you sure you want to delete your blog?');
+        if (answer) {
+            deleteBlog(slug);
+        }
+    };
+
     const showAllBlogs = () => {
         return blogs.map((blog, i) => {
             return (
-                <div key={i}>
+                <div key={i} className='pb-5'>
                     <h3>{blog.title}</h3>
                     <p className='mark'>Written by {blog.postedBy.name} | Published on {moment(blog.updatedAt).fromNow()}</p>
+                    <button className='btn btn-sm btn-danger' onClick={() => deleteConfirm(blog.slug)}>
+                        Delete
+                    </button>
                 </div>
             );
         });
@@ -40,6 +61,10 @@ const BlogRead = () => {
         <React.Fragment>
             <div className="row">
                 <div className='col-md-12'>
+                    {message &&
+                    <div className='pb-5'>
+                        <div className="aler alert-warning">{message}</div>
+                    </div>}
                     {showAllBlogs()}
                 </div>
             </div>
