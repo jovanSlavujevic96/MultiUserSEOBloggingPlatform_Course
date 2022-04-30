@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import {API} from '../config'
+import queryString from 'query-string';
 
 export const createBlog = (blog, token) => {
     return fetch(`${API}/blog`, {
@@ -62,6 +63,20 @@ export const listRelatedBlogs = (blog) => {
 
 export const listAllBlogs = () => {
     return fetch(`${API}/blogs`, {
+        method: 'GET'
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
+export const listSearchBlogs = (params) => {
+    // console.log('search params', params); // debug
+    let query = queryString.stringify(params); // i.e. ?limit=100&pagination=10
+    // console.log('query params', query);   // debug
+
+    return fetch(`${API}/blogs/search?${query}`, {
         method: 'GET'
     })
     .then(response => {

@@ -19,6 +19,7 @@ import {
     DropdownItem } from 'reactstrap';
 
 import '.././node_modules/nprogress/nprogress.css'; // import CSS file (supported on newer next.js by default)
+import Search from './blog/Search';
 
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = (url) => NProgress.done();
@@ -34,7 +35,7 @@ const Header = () => {
     // found this example on: https://reactstrap.github.io/?path=/docs/components-navbar--navbar
     // <Navlink> is same as <a>
     return (
-        <div>
+        <React.Fragment>
             <Navbar color="light" light expand="md">
                 <Link href="/">
                     <NavLink className="font-weight-bold">{APP_NAME}</NavLink>
@@ -95,7 +96,8 @@ const Header = () => {
                     </Nav>
                 </Collapse>
             </Navbar>
-        </div>
+            <Search/>
+        </React.Fragment>
     );
 }
 

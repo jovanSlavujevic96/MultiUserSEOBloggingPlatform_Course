@@ -325,6 +325,8 @@ export const listRelatedBlogs = (req, res) => {
 
 // 
 export const listSearchBlogs = (req, res) => {
+    // console.log("listSearchBlogs query: ", req.query); // debug
+
     const {search} = req.query;
     if (search) {
         Blog.find({

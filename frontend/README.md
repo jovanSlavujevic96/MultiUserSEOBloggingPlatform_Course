@@ -44,3 +44,6 @@ To use pretty timestamp format install:
 
 To render text as html within page install:
 > $npm i --save --lecagy-peer-deps react-render-html
+
+To make search-engine really easy we will use:
+> $npm i query-string
