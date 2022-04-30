@@ -12,6 +12,6 @@ const tagSchema = new mongoose.Schema({
         unique: true,
         index: true,
     },
-}, {timestamp: true});
+}, {timestamps: true});
 
 export default  mongoose.model('Tag', tagSchema);
