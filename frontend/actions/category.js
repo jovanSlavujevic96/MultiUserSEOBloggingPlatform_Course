@@ -29,7 +29,7 @@ export const getCategories = () => {
 };
 
 // get the single category
-export const getSignleCategory = (slug) => {
+export const getSingleCategory = (slug) => {
     return fetch(`${API}/category/${slug}`, {
         method: 'GET',
     })
