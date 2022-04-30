@@ -3,7 +3,7 @@ import {API} from '../config'
 import queryString from 'query-string';
 
 export const userPublicProfile = (username) => {
-    return fetch(`${API}/user/username`, {
+    return fetch(`${API}/user/${username}`, {
         method: 'GET',
         headers: {
             Accept: 'application/json',

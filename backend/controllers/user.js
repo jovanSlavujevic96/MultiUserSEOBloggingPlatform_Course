@@ -35,6 +35,7 @@ export const publicProfile = (req, res) => {
                     });
                 }
                 user.photo = undefined; // just to be sure
+                user.hashed_password = undefined;
                 res.json({
                     user, blogs: data
                 });
