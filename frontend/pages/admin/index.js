@@ -18,30 +18,30 @@ const AdminIndex = () => {
                         <div className="col-md-4">
                             <ul className="list-group">
                                 <li className="list-group-item">
-                                    <Link href="/admin/crud/category-tag">
-                                        <a>Create Category</a>
-                                    </Link>
+                                    <a href="/admin/crud/category-tag">
+                                        Create Category
+                                    </a>
                                 </li>
                             </ul>
                             <ul className="list-group">
                                 <li className="list-group-item">
-                                    <Link href="/admin/crud/category-tag">
-                                        <a>Create Tag</a>
-                                    </Link>
+                                    <a href="/admin/crud/category-tag">
+                                        Create Tag
+                                    </a>
                                 </li>
                             </ul>
                             <ul className="list-group">
                                 <li className="list-group-item">
-                                    <Link href="/admin/crud/blog">
-                                        <a>Create Blog</a>
-                                    </Link>
+                                    <a href="/admin/crud/blog">
+                                        Create Blog
+                                    </a>
                                 </li>
                             </ul>
                             <ul className="list-group">
                                 <li className="list-group-item">
-                                    <Link href="/admin/crud/blogs">
-                                        <a>Update/Delete Blogs</a>
-                                    </Link>
+                                    <a href="/admin/crud/blogs">
+                                        Update/Delete Blogs
+                                    </a>
                                 </li>
                             </ul>
                         </div>
