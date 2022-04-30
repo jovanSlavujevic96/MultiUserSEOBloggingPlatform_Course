@@ -27,7 +27,7 @@ export const getTags = () => {
     .catch(err => console.log(err));
 };
 
-export const getSignleTag = (slug) => {
+export const getSingleTag = (slug) => {
     return fetch(`${API}/tag/${slug}`, {
         method: 'GET',
     })
