@@ -322,3 +322,23 @@ export const listRelatedBlogs = (req, res) => {
             res.json(blogs);
         });
 };
+
+// 
+export const listSearchBlogs = (req, res) => {
+    const {search} = req.query;
+    if (search) {
+        Blog.find({
+            $or: [
+                {title: {$regex: search, $options: 'i'}}, // search for title in case insensitive mode
+                {body:  {$regex: search, $options: 'i'}}  // search for body in case insensitive mode
+            ]
+        }, (err, blogs) => {
+            if (err) {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
+            }
+            res.json(blogs);
+        }).select('-photo -body'); // exclude photo and body from blog objects
+    }
+};

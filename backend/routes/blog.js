@@ -3,7 +3,7 @@ const router = express.Router();
 
 import {
     createBlog, listAllBlogs, listAllBlogsCategoriesTags, readBlog,
-    removeBlog, updateBlog, getBlogPhoto, listRelatedBlogs
+    removeBlog, updateBlog, getBlogPhoto, listRelatedBlogs, listSearchBlogs
 } from '../controllers/blog.js';
 import { requireSignin, adminMiddleware } from '../controllers/auth.js';
 
@@ -14,6 +14,7 @@ router.get('/blog/:slug', readBlog);
 router.delete('/blog/:slug', requireSignin, adminMiddleware, removeBlog);
 router.put('/blog/:slug', requireSignin, adminMiddleware, updateBlog);
 router.get('/blog/photo/:slug', getBlogPhoto);
-router.post('/blogs/related', listRelatedBlogs)
+router.post('/blogs/related', listRelatedBlogs);
+router.get('/blogs/search', listSearchBlogs);
 
 export default router;
