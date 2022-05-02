@@ -61,7 +61,13 @@ const BlogRead = () => {
             return (
                 <div key={i} className='pb-5'>
                     <h3>{blog.title}</h3>
-                    <p className='mark'>Written by {blog.postedBy.name} | Published on {moment(blog.updatedAt).fromNow()}</p>
+                    <p className='mark'>
+                        Written by {' '}
+                        <a href={`/profile/${blog.postedBy.username}`}>
+                            {blog.postedBy.username}
+                        </a> {' '}
+                        | Published on {moment(blog.updatedAt).fromNow()}
+                    </p>
                     <button className='btn btn-sm btn-danger' onClick={() => deleteConfirm(blog.slug)}>
                         Delete
                     </button>
