@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import Router from 'next/router';
-import { getCookie, isAuth } from '../../actions/auth';
+import { getCookie, isAuth, updateUser } from '../../actions/auth';
 import { getProfile, updateProfile } from '../../actions/user';
 import { initScriptLoader } from 'next/script';
 import { API } from '../../config';
@@ -57,15 +57,17 @@ const ProfileUpdate = () => {
             if (data.error) {
                 setValues({...values, error: data.error, success: false, loading: false});
             } else {
-                setValues({...values,
-                    username: data.username,
-                    name: data.name,
-                    email: data.email,
-                    about: data.about,
-                    success: true,
-                    loading: false,
-                    userData: new FormData(),
-                    photoName: data.username
+                updateUser(data, () => {
+                    setValues({...values,
+                        username: data.username,
+                        name: data.name,
+                        email: data.email,
+                        about: data.about,
+                        success: true,
+                        loading: false,
+                        userData: new FormData(),
+                        photoName: data.username
+                    });
                 });
             }
         });

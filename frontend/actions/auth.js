@@ -133,3 +133,16 @@ export const signout = (next) => {
     })
     .catch(err => console.log(err));
 };
+
+export const updateUser = (user, next) => {
+    // if (process.browser) @deprecated
+    if (typeof window) {
+        if (localStorage.getItem('user')) {
+            // let auth = JSON.parse(localStorage.getItem('user'));
+            // auth = user;
+            // localStorage.setItem('user', JSON.stringify(auth)); //nonsense
+            localStorage.setItem('user', JSON.stringify(user));
+            next();
+        }
+    }
+};
