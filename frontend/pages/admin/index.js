@@ -37,6 +37,11 @@ const AdminIndex = () => {
                                         Update/Delete Blogs
                                     </a>
                                 </li>
+                                <li className="list-group-item">
+                                    <a href="/user/update">
+                                        Update Profile
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         <div className="col-md-4">

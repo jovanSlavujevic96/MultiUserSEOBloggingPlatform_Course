@@ -4,6 +4,7 @@ import Router from 'next/router';
 import { getCookie, isAuth } from '../../actions/auth';
 import { getProfile, updateProfile } from '../../actions/user';
 import { initScriptLoader } from 'next/script';
+import { API } from '../../config';
 
 const ProfileUpdate = () => {
     const [values, setValues] = useState({
@@ -16,11 +17,12 @@ const ProfileUpdate = () => {
         success: false,
         loading: false,
         photo: '',
+        photoName: '', // final username
         userData: typeof window !== 'undefined' && new FormData(),
     });
 
     const token = getCookie('token');
-    const {username, name, email, about, password, error, success, loading, photo, userData} = values;
+    const {username, name, email, about, password, error, success, loading, photo, photoName, userData} = values;
 
     const init = () => {
         getProfile(token).then(data => {
@@ -31,7 +33,8 @@ const ProfileUpdate = () => {
                     username: data.username,
                     name: data.name,
                     email: data.email,
-                    about: data.about
+                    about: data.about,
+                    photoName: data.username
                 });
             }
         });
@@ -60,7 +63,9 @@ const ProfileUpdate = () => {
                     email: data.email,
                     about: data.about,
                     success: true,
-                    loading: false
+                    loading: false,
+                    userData: new FormData(),
+                    photoName: data.username
                 });
             }
         });
@@ -106,14 +111,40 @@ const ProfileUpdate = () => {
         </form>
     );
 
+    const showError = () => (
+        <div className='alert alert-danger' style={{display: error ? '' : 'none'}}>
+            {error}
+        </div>
+    );
+
+    const showSuccess = () => (
+        <div className='alert alert-success' style={{display: success ? '' : 'none'}}>
+            Profile updated
+        </div>
+    );
+
+    const showLoading = () => (
+        <div className='alert alert-info' style={{display: loading ? '' : 'none'}}>
+            Loading...
+        </div>
+    );
+
     return (
         <React.Fragment>
             <div className='container'>
                 <div className='row'>
                     <div className='col-md-4'>
-                        image
+                        <img
+                            src={`${API}/user/photo/${photoName}`}
+                            className="img img-fluid img-thumbnail mb-3"
+                            style={{maxHeight: 'auto', maxWidth: '100%'}}
+                            alt='user profile'
+                        />
                     </div>
                     <div className='col-md-8 mb-5'>
+                        {showSuccess()}
+                        {showError()}
+                        {showLoading()}
                         {profileUpdateForm()}
                     </div>
                 </div>

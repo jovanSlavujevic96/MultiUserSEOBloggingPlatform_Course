@@ -61,20 +61,26 @@ export const update = (req, res) => {
         let user = req.profile;
         user = _.extend(user, fields); // updates the fields that are changed
 
+        if (fields.password && fields.password.length < 6) {
+            return res.status(400).json({
+                error: "Password should me min 6 characters long"
+            });
+        }
+
         if (files.photo) {
             if (files.photo.size > 1000000) {
                 return res.status(400).json({
                     error: 'Image should be less than 1 MB'
                 });
             }
-            user.photo.data = fs.readFileSync(files.photo.path);
-            user.photo.content = files.photo.mimetype;
+            user.photo.data = fs.readFileSync(files.photo.filepath);
+            user.photo.contentType = files.photo.type;
         }
 
         user.save((err, result) => {
             if (err) {
                 return res.status(400).json({
-                    error: errorHandler(err)
+                    error: 'All fields are required'
                 });
             }
             user.hashed_password = undefined;
