@@ -49,6 +49,8 @@ export const publicProfile = (req, res) => {
 
 export const update = (req, res) => {
     let form = new formidable.IncomingForm();
+    form.keepExtension = true;
+
     form.parse(req, (err, fields, files) => {
         if (err) {
             return res.status(400).json({
@@ -67,17 +69,17 @@ export const update = (req, res) => {
             }
             user.photo.data = fs.readFileSync(files.photo.path);
             user.photo.content = files.photo.mimetype;
-
-            user.save((err, result) => {
-                if (err) {
-                    return res.status(400).json({
-                        error: errorHandler(err)
-                    });
-                }
-                user.hashed_password = undefined;
-                res.json(user);
-            });
         }
+
+        user.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
+            }
+            user.hashed_password = undefined;
+            res.json(user);
+        });
     });
 }
 
