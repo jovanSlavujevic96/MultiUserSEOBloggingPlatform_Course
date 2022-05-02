@@ -5,7 +5,7 @@ import {
     createBlog, listAllBlogs, listAllBlogsCategoriesTags, readBlog,
     removeBlog, updateBlog, getBlogPhoto, listRelatedBlogs, listSearchBlogs
 } from '../controllers/blog.js';
-import { requireSignin, adminMiddleware } from '../controllers/auth.js';
+import { requireSignin, adminMiddleware, authMiddleware } from '../controllers/auth.js';
 
 router.post('/blog', requireSignin, adminMiddleware, createBlog);
 router.get('/blogs', listAllBlogs);
@@ -16,5 +16,10 @@ router.put('/blog/:slug', requireSignin, adminMiddleware, updateBlog);
 router.get('/blog/photo/:slug', getBlogPhoto);
 router.post('/blogs/related', listRelatedBlogs);
 router.get('/blogs/search', listSearchBlogs);
+
+// auth user blog crud
+router.post('/user/blog', requireSignin, authMiddleware, createBlog);
+router.delete('/user/blog/:slug', requireSignin, authMiddleware, removeBlog);
+router.put('/user/blog/:slug', requireSignin, authMiddleware, updateBlog);
 
 export default router;
