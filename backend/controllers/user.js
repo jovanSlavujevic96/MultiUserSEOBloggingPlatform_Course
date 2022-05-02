@@ -2,6 +2,10 @@ import User from '../models/user.js';
 import Blog from '../models/blog.js';
 import { errorHandler } from '../helpers/dbErrorHandler.js';
 
+import _ from 'lodash';
+import formidable from 'formidable';
+import fs from 'fs';
+import { error } from 'console';
 
 const read = (req, res) => {
     // we don't want to provide user information with password
@@ -42,3 +46,52 @@ export const publicProfile = (req, res) => {
             });
     });
 };
+
+export const update = (req, res) => {
+    let form = new formidable.IncomingForm();
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            return res.status(400).json({
+                error: 'Photo could not be uploaded'
+            });
+        }
+        // save user
+        let user = req.profile;
+        user = _.extend(user, fields); // updates the fields that are changed
+
+        if (files.photo) {
+            if (files.photo.size > 1000000) {
+                return res.status(400).json({
+                    error: 'Image should be less than 1 MB'
+                });
+            }
+            user.photo.data = fs.readFileSync(files.photo.path);
+            user.photo.content = files.photo.mimetype;
+
+            user.save((err, result) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: errorHandler(err)
+                    });
+                }
+                user.hashed_password = undefined;
+                res.json(user);
+            });
+        }
+    });
+}
+
+export const photo = (req, res) => {
+    const username = req.params.username;
+    User.findOne({username}).exec((err, user) => {
+        if (err || !user) {
+            return res.status(400).json({
+                error: 'User not found'
+            });
+        }
+        if (user.photo.data) {
+            res.set('Content-Type', user.photo.contentType);
+            return res.send(user.photo.data);
+        }
+    });
+}
