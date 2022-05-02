@@ -20,7 +20,7 @@ router.get('/blogs/search', listSearchBlogs);
 
 // auth user blog crud
 router.post('/user/blog', requireSignin, authMiddleware, createBlog);
-router.get('/:userename/blogs', listBlogsByUser);
+router.get('/:username/blogs', listBlogsByUser);
 router.delete('/user/blog/:slug', requireSignin, authMiddleware, canUpdateDeleteBlog, removeBlog);
 router.put('/user/blog/:slug', requireSignin, authMiddleware, canUpdateDeleteBlog, updateBlog);
 

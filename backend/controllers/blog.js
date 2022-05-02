@@ -272,14 +272,14 @@ export const updateBlog = (req, res) => {
                 oldBlog.photo.data = fs.readFileSync(files.photo.filepath);
                 oldBlog.photo.contentType = files.photo.types;
             }
-    
+
             oldBlog.save((err, result) => {
                 if (err) {
                     return res.status(400).json({
                         error: errorHandler(err)
                     });
                 }
-                // res.photo = undefined; // makes sure that we don't send photo
+                result.photo = undefined; // makes sure that we don't send photo
                 res.json(result);
             });
 
@@ -346,24 +346,26 @@ export const listSearchBlogs = (req, res) => {
 };
 
 export const listBlogsByUser = (req, res) => {
-    User.findOne({username: req.params.username}).exec((err, user) => {
-        if (err) {
-            return res.status(400).json({
-                error: errorHandler(err)
-            });
-        }
-        const userId = user._id;
-        Blog.find({postedBy: userId})
-            .populate('categories', '_id name slug')
-            .populate('tags', '_id name slug')
-            .select('_id title slug createdAt updatedAd categories tags')
-            .exec((err, data) => {
-                if (err) {
-                    return res.status(400).json({
-                        error: errorHandler(err)
-                    });
-                }
-                res.json(data);
-            });
-    });
+    User.findOne({username: req.params.username})
+        .select('id')
+        .exec((err, user) => {
+            if (err) {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
+            }
+            Blog.find({postedBy: user._id})
+                .populate('categories', '_id name slug')
+                .populate('tags', '_id name slug')
+                .populate('postedBy', '_id name username')
+                .select('_id title slug createdAt updatedAd postedBy categories tags')
+                .exec((err, data) => {
+                    if (err) {
+                        return res.status(400).json({
+                            error: errorHandler(err)
+                        });
+                    }
+                    res.json(data);
+                });
+        });
 };

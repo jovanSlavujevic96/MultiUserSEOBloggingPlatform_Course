@@ -6,13 +6,13 @@ import { listAllBlogs, removeBlog, updateBlog } from '../../actions/blog';
 import React from 'react';
 import moment from 'moment';
 
-const BlogRead = () => {
+const BlogRead = ({username}) => {
     const [blogs, setBlogs] = useState([]);
     const [message, setMessage] = useState('');
     const token = getCookie('token');
 
     const loadAllBlogs = () => {
-        listAllBlogs().then(data => {
+        listAllBlogs(username).then(data => {
             if (data.error) {
                 console.log(data.error);
             } else {
@@ -42,15 +42,15 @@ const BlogRead = () => {
     const showUpdateButton = (blog) => {
         if (isAuth() && isAuth().role === 0) {
             return (
-                <Link href={`/user/crud/blog/${blog.slug}`}>
-                    <a className='ml-5 btn btn-sm btn-warning'>Update</a>
+                <Link href={`/user/crud/${blog.slug}`}>
+                    <a className='ml-2 btn btn-sm btn-warning'>Update</a>
                 </Link>
             );
         }
         else if (isAuth() && isAuth().role == 1) {
             return (
                 <Link href={`/admin/crud/${blog.slug}`}>
-                    <a className='ml-1 btn btn-sm btn-warning'>Update</a>
+                    <a className='ml-2 btn btn-sm btn-warning'>Update</a>
                 </Link>
             );
         }
