@@ -75,7 +75,7 @@ const requireSignin = expressJwt({
     algorithms: ["HS256"], // must be added
 });
 
-const authMiddleware = () => (req, res, next) => {
+const authMiddleware = (req, res, next) => {
     const authUserId = req.user._id;
     User.findById({_id: authUserId}).exec((err, user) => {
         if (err || !user) {
