@@ -344,3 +344,26 @@ export const listSearchBlogs = (req, res) => {
         }).select('-photo -body'); // exclude photo and body from blog objects
     }
 };
+
+export const listBlogsByUser = (req, res) => {
+    User.findOne({username: req.params.username}).exec((err, user) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+        const userId = user._id;
+        Blog.find({postedBy: userId})
+            .populate('categories', '_id name slug')
+            .populate('tags', '_id name slug')
+            .select('_id title slug createdAt updatedAd categories tags')
+            .exec((err, data) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: errorHandler(err)
+                    });
+                }
+                res.json(data);
+            });
+    });
+};

@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import expressJwt from 'express-jwt'
 
 import User from '../models/user.js';
+import blog from '../models/blog.js';
+import { errorHandler } from '../helpers/dbErrorHandler.js';
 
 const signup = (req, res) => {
     User.findOne({email: req.body.email}).exec((err, user) => {
@@ -115,3 +117,21 @@ export { signout };
 export { requireSignin };
 export { authMiddleware };
 export { adminMiddleware };
+
+export const canUpdateDeleteBlog = (req, res, next) => {
+    const slug = req.params.slug.toLowerCase();
+    blog.find({slug}).exec((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+        const authorizedUser = (data.postedBy._id.toString() === req.profile._id.toString());
+        if (!authorizedUser) {
+            return res.status(400).json({
+                error: 'You are not authorized'
+            });
+        }
+        next();
+    });
+};
