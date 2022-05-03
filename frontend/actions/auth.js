@@ -1,6 +1,26 @@
 import fetch from 'isomorphic-fetch';
 import cookie from 'js-cookie';
 import {API} from '../config'
+import Router from 'next/router';
+
+/**
+ * @brief checks is user got 401 Unaothirzed error response
+ * @if user is unathorized - it signouts user and forwards him to sign in page
+ */
+export const handleResponse = (response) => {
+    if (response.status === 401) {
+        signout(() => {
+            Router.push({
+                pathname: '/signin',
+                query: {
+                    message: 'Your session is expired. Please sign in.'
+                }
+            });
+        });
+    } else {
+        return;
+    }
+};
 
 // signup
 export const signup = (user) => {
