@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { emailContactForm } from "../../actions/form";
 
-const ContactForm = () => {
+const ContactForm = ({authorEmail}) => {
     const [values, setValues] = useState({
        message: '',
        name: '',
@@ -18,7 +18,7 @@ const ContactForm = () => {
     const clickSubmit = (e) => {
         e.preventDefault();
         setValues({...values, buttonText: 'Sending...'});
-        emailContactForm({name, email, message}).then(data => {
+        emailContactForm({authorEmail, name, email, message}).then(data => {
             if (data.error) {
                 setValues({...values, error: data.error});
             } else {
@@ -53,7 +53,7 @@ const ContactForm = () => {
         <div className="alert alert-danger" style={{display: error ? '' : 'none'}}>{error}</div>
     );
 
-    const contactForm = () => {
+    const showContactForm = () => {
         return (
             <form onSubmit={clickSubmit} className="pb-5">
                 <div className="form-group">
@@ -101,7 +101,7 @@ const ContactForm = () => {
         <React.Fragment>
             {showSuccessMessage()}
             {showErrorMessage()}
-            {contactForm()}
+            {showContactForm()}
         </React.Fragment>
     )
 };
