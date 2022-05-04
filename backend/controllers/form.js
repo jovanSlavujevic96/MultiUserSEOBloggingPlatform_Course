@@ -1,3 +1,5 @@
+import { errorHandler } from '../helpers/dbErrorHandler.js';
+
 import sgMail from '@sendgrid/mail'; // SENDGRID_API_KEY
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -42,7 +44,7 @@ export const contactForm = (req, res) => {
         .catch((err) => {
             console.log("Sendgrid ERROR: ", err);
             return res.status(400).json({
-                success: false
+                error: errorHandler(err)
             });
         });
 };
@@ -86,7 +88,7 @@ export const contactBlogAuthorForm = (req, res) => {
         .catch((err) => {
             console.log("Sendgrid ERROR: ", err);
             return res.status(400).json({
-                success: false
+                error: errorHandler(err)
             });
         });
 };
