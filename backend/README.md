@@ -57,3 +57,6 @@ To generate unique usernames we're going to install shortid npm package
 
 To run server:
 > $ npm run start
+
+To use a sendgrid with node.js there is a npm package:
+> $ npm i @sendgrid/mail

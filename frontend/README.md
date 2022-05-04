@@ -47,3 +47,5 @@ To render text as html within page install:
 
 To make search-engine really easy we will use:
 > $npm i query-string
+
+In order to integrate DISQUS you must install dependencies, full instruction can be found on <strong>doc/DISQUS-commenting-system/README.md</strong>

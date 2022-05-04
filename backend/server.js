@@ -18,6 +18,7 @@ import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
 import categoryRoutes from './routes/category.js';
 import tagRoutes from './routes/tag.js';
+import formRouter from './routes/form.js';
 
 // app
 const app = express();
@@ -44,6 +45,7 @@ app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', tagRoutes);
+app.use('/api', formRouter);
 
 // port
 const port = process.env.PORT || 8000;
