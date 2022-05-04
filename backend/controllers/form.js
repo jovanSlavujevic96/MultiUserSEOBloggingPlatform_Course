@@ -33,9 +33,60 @@ export const contactForm = (req, res) => {
         `
     };
 
-    sgMail.send(emailData).then(sent => {
-        return res.json({
-            success: true
+    sgMail.send(emailData)
+        .then(sent => {
+            return res.json({
+                success: true
+            });
+        })
+        .catch((err) => {
+            console.log("Sendgrid ERROR: ", err);
+            return res.status(400).json({
+                success: false
+            });
         });
-    });
+};
+
+// contactBlogAuthorForm
+export const contactBlogAuthorForm = (req, res) => {
+    const {authorEmail, email, name, message} = req.body;
+
+    const maillist = [authorEmail, process.env.EMAIL_TO]
+
+    const emailData = {
+        to: maillist,
+        from: `${process.env.EMAIL_FROM}`,
+        subject: `Someone messaged you from ${process.env.APP_NAME}`,
+        text: `
+            ----------------------------------------\n
+            Message received from: \n
+            Name: ${name} \n
+            Email: ${email} \n
+            Message: ${message} \n
+            ----------------------------------------\
+        `,
+        html: `
+            <hr/>
+            <h4>Message received from: </h4>
+            <p>Name: ${name}</p>
+            <p>Email: ${email}</p>
+            <p>Message: ${message}</p>
+            <hr/>
+            <p>This email may contain sensetive information</p>
+            <p>https://seoblog.com</p>
+        `
+    };
+
+    sgMail.send(emailData)
+        .then(sent => {
+            return res.json({
+                success: true
+            });
+        })
+        .catch((err) => {
+            console.log("Sendgrid ERROR: ", err);
+            return res.status(400).json({
+                success: false
+            });
+        });
 };
