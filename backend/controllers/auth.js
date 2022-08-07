@@ -6,6 +6,9 @@ import User from '../models/user.js';
 import Blog from '../models/blog.js';
 import { errorHandler } from '../helpers/dbErrorHandler.js';
 
+import sgMail from '@sendgrid/mail'; // SENDGRID_API_KEY
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 const signup = (req, res) => {
     User.findOne({email: req.body.email}).exec((err, user) => {
         if (user) {
@@ -136,4 +139,54 @@ export const canUpdateDeleteBlog = (req, res, next) => {
             }
             next();
         });
+};
+
+export const forgotPassword = (req, res, next) => {
+    // grab the e-mail
+    const {email} = req.body;
+
+    User.findOne({email}, (err, user) => {
+        if (err || !user) {
+            return res.status(401).json({
+                error: 'User with that email does not exist'
+            });
+        }
+
+        const token = jwt.sign({_id: user._id}, process.env.JWT_RESET_PASSWORD, {expiresIn: '10m'});
+
+        // send email
+        const emailData = {
+            to: email,
+            from: `${process.env.EMAIL_FROM}`,
+            subject: `Password reset link`,
+            html: `
+                <p>Please use the following link to reset your password:</p>
+                <p>${process.env.CLIENT_URL}/auth/password/reset/${token}</p>
+                <hr/>
+                <p>This email may contain sensetive information</p>
+                <p>https://seoblog.com</p>
+            `
+        };
+
+        // populating the db > user > resetPasswordLink
+        return user.updateOne({resetPasswordLink: token}, (err, success) => {
+            if (err) {
+                return res.json({error: errorHandler(err)});
+            } else {
+                sgMail.send(emailData).then(sent => {
+                    return res.json({
+                        message: `
+                            Email has been sent to ${email}.
+                            Follow the instruction to reset your password.
+                            Link expires in 10 min.
+                        `
+                    })
+                })
+            }
+        })
+    })
+};
+
+export const resetPassword = (req, res, next) => {
+    //
 };
