@@ -1,7 +1,7 @@
 import React from "react";
 import Router from "next/router";
 import {useState, useEffect} from "react";
-import {signup, isAuth} from "../../actions/auth";
+import {isAuth, preSignup} from "../../actions/auth";
 
 const SignupComponent = () => {
     const [values, setValues] = useState({
@@ -41,7 +41,7 @@ const SignupComponent = () => {
         const user = {name, email, password};
 
         // pass user object to signup
-        signup(user).then(data => {
+        preSignup(user).then(data => {
             // error: 'string of error'
             // recommendation to always send error in this format
             if (data.error) {

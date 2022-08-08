@@ -196,3 +196,20 @@ export const resetPassword = resetInfo => {
     })
     .catch(err => console.log(err));
 };
+
+export const preSignup = user => {
+    return fetch(`${API}/pre-signup`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user) // converts js objects into JSON objects
+    })
+    // once we send our message we're going to get/handle the response
+    .then(response => {
+        return response.json();
+    })
+    // catch error -> log it on console
+    .catch(err => console.log(err));
+};

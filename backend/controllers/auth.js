@@ -10,6 +10,41 @@ import sgMail from '@sendgrid/mail'; // SENDGRID_API_KEY
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 import _ from 'lodash';
 
+export const preSignup = (req, res) => {
+    const {name, email, password} = req.body;
+    User.findOne({email: email.toLowerCase()}, (err, user) => {
+        if (user) {
+            return res.status(400).json({
+                error: 'Email is taken'
+            });
+        }
+
+        const token = jwt.sign({name, email, password}, process.env.JWT_ACCOUNT_ACTIVATION, { expiresIn: '10m' });
+
+        const emailData = {
+            to: email,
+            from: `${process.env.EMAIL_FROM}`,
+            subject: `Account activation link`,
+            html: `
+                <p>Please use the following link to activate your account:</p>
+                <p>${process.env.CLIENT_URL}/auth/account/activate/${token}</p>
+                <hr/>
+                <p>This email may contain sensetive information</p>
+                <p>https://seoblog.com</p>
+            `
+        };
+
+        sgMail.send(emailData).then(sent => {
+            return res.json({
+                message: `
+Email has been sent to ${email}.
+Follow the instructions to activate your account.
+                `
+            });
+        })
+    });
+}
+
 const signup = (req, res) => {
     User.findOne({email: req.body.email}).exec((err, user) => {
         if (user) {
@@ -177,9 +212,9 @@ export const forgotPassword = (req, res) => {
                 sgMail.send(emailData).then(sent => {
                     return res.json({
                         message: `
-                            Email has been sent to ${email}.
-                            Follow the instruction to reset your password.
-                            Link expires in 10 min.
+Email has been sent to ${email}.
+Follow the instruction to reset your password.
+Link expires in 10 min.
                         `
                     })
                 })
