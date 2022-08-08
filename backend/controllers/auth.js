@@ -8,6 +8,7 @@ import { errorHandler } from '../helpers/dbErrorHandler.js';
 
 import sgMail from '@sendgrid/mail'; // SENDGRID_API_KEY
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+import _ from 'lodash';
 
 const signup = (req, res) => {
     User.findOne({email: req.body.email}).exec((err, user) => {
@@ -141,7 +142,7 @@ export const canUpdateDeleteBlog = (req, res, next) => {
         });
 };
 
-export const forgotPassword = (req, res, next) => {
+export const forgotPassword = (req, res) => {
     // grab the e-mail
     const {email} = req.body;
 
@@ -187,6 +188,43 @@ export const forgotPassword = (req, res, next) => {
     })
 };
 
-export const resetPassword = (req, res, next) => {
-    //
+export const resetPassword = (req, res) => {
+    const {resetPasswordLink, newPassword} = req.body;
+
+    if (resetPasswordLink) {
+        jwt.verify(resetPasswordLink,
+            process.env.JWT_RESET_PASSWORD,
+            function(err, decoded) {
+                if (err) {
+                    return res.status(401).json({
+                        error: 'Expired link. Try again'
+                    });
+                }
+                User.findOne({resetPasswordLink}, (err, user) => {
+                    if (err || !user) {
+                        return res.status(401).json({
+                            error: 'Something went wrong. Try later'
+                        });
+                    }
+                    const updatedFields = {
+                        password: newPassword,
+                        resetPasswordLink: ''
+                    };
+
+                    // update fields to user in mongoDB
+                    user = _.extend(user, updatedFields);
+                    user.save((err, result) => {
+                        if (err) {
+                            return res.status(400).json({
+                                error: errorHandler(err)
+                            });
+                        }
+                        res.json({
+                            message: `Great! Now you can login with your new password`
+                        });
+                    })
+                });
+            }
+        )
+    }
 };
