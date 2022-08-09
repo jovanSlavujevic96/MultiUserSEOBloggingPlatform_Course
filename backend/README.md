@@ -60,3 +60,21 @@ To run server:
 
 To use a sendgrid with node.js there is a npm package:
 > $ npm i @sendgrid/mail
+
+## How to setup Google login on your app
+
+1. Make sure you are signed in with you Google account & registered Google Developer account
+2. Go to https://console.cloud.google.com page
+3. Create a <b>NEW PROJECT</b>
+4. Swith to <b>NEW PROJECT</b>
+5. Go to <i>API & Services</i> -> <i>Credentials</i>
+6. Go to <b>Configure OAuth consent screen</b>
+7. For <b>User Type</b> select <i>Extenral</i> and click <b>CREATE</b> button
+8. Fill <b>Application name</b> <b>User support email</b> and <b>Developer contact information</b> and clikc <b>SAVE & CONTINUE</b> button
+9. For next pages keep clicking <b>SAVE & CONTINUE</b> untill you got out from <b>OAuth consent screen</b> and finnaly click <b>GO BACK TO DASHBOARD</b>
+10. Go to <i>Create Credentials</i> -> <i>OAuth client ID</i>
+11. For <b>Application type</b> select <i>Web application</i>, fill <b>Name</b> and add <b>Authorized JavaScript origins</b> and <b>Authorized redirect URIs</b> by clicking <b>ADD URI</b> button of CLIENT URL (i.e. http://localhost:3000) and finnaly click <b>CREATE</b> button
+12. On "OAuth client created" popup copy <b>Your Client ID</b> to your config file(s) on both backend (.env) & frontend side (next.config.js)
+
+To use Google Login mechanism install:
+> $ npm i google-auth-library

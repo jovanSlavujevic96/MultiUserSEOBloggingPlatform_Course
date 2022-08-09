@@ -43,12 +43,15 @@ To use pretty timestamp format install:
 > $ npm i moment
 
 To render text as html within page install:
-> $npm i --save --lecagy-peer-deps react-render-html
+> $ npm i --save --lecagy-peer-deps react-render-html
 
 To make search-engine really easy we will use:
-> $npm i query-string
+> $ npm i query-string
 
 In order to integrate DISQUS you must install dependencies, full instruction can be found on <strong>doc/DISQUS-commenting-system/README.md</strong>
 
 To decode json web token install:
-> $npm i jsonwebtoken
+> $ npm i jsonwebtoken
+
+To use Google Login mechanism install:
+> $ npm install @react-oauth/google@latest

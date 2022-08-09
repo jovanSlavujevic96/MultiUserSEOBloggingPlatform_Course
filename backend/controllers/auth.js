@@ -1,6 +1,7 @@
 import shortId from 'shortid';
 import jwt from 'jsonwebtoken';
 import expressJwt from 'express-jwt'
+import _ from 'lodash';
 
 import User from '../models/user.js';
 import Blog from '../models/blog.js';
@@ -8,7 +9,8 @@ import { errorHandler } from '../helpers/dbErrorHandler.js';
 
 import sgMail from '@sendgrid/mail'; // SENDGRID_API_KEY
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-import _ from 'lodash';
+
+import { OAuth2Client } from 'google-auth-library';
 import user from '../models/user.js';
 
 export const preSignup = (req, res) => {
@@ -298,3 +300,54 @@ export const resetPassword = (req, res) => {
         )
     }
 };
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+export const googleLogin = (req, res) => {
+    const idToken = req.body.tokenId;
+    client.verifyIdToken({idToken, audience: process.env.GOOGLE_CLIENT_ID})
+        .then(response => {
+            // console.log(respsone);
+            const {email_verified, name, email, jti} = response.payload;
+
+            if (email_verified) {
+                User.findOne({email}).exec((err, user) => {
+                    // if user already exist -> sign in
+                    if (user) {
+                        // console.log(user);
+                        const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET, {expiresIn: '1d'});
+                        const {_id, email, name, role, username} = user;
+
+                        res.cookie('token', token, {expiresIn: '1d'});
+                        return res.json({token, user: {_id, email, name, role, username}})
+                    }
+                    // if user don't exist -> sign up
+                    else {
+                        let username = shortId.generate();
+                        let profile = `${process.env.CLIENT_URL}/profile/${username}`;
+                        // let password = jti;
+                        // for further security
+                        let password = jti + process.env.JWT_SECRET;
+
+                        user = new User({name, email, profile, username, password});
+                        user.save((err, data) => {
+                            if (err) {
+                                return res.status(400).json({
+                                    errror: errorHandler(err)
+                                });
+                            }
+
+                            const token = jwt.sign({_id: data._id}, process.env.JWT_SECRET, {expiresIn: '1d'});
+                            const {_id, email, name, role, username} = data;
+
+                            res.cookie('token', token, {expiresIn: '1d'});
+                            return res.json({token, user: {_id, email, name, role, username}})
+                        });
+                    }
+                });
+            } else {
+                return res.status(400).json({
+                    error: 'Google login failed. Try again.'
+                });
+            }
+        });
+}
