@@ -78,3 +78,14 @@ To use a sendgrid with node.js there is a npm package:
 
 To use Google Login mechanism install:
 > $ npm i google-auth-library
+
+## Google Analitics
+
+Main benefit to use `Google Analitics` is that you can see how many people are visiting your site and how many people are coming from organic search (by google searching)
+
+## How to setup Google Analitics on your app
+
+1. Go to https://analytics.google.com page
+2. Select <b>Start measurement</b> in order to start Account setup
+3. Give account name as you wish and make sure that you checked-in `Google products & services`, `Benchmarking`, `Technical support` & `Account specialists`, then click <b>Next</b>
+4. In <i>Property Details</i> menu enter Website name & URL, and propert Time Zone & Currency.
